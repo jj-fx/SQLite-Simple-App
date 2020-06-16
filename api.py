@@ -1,22 +1,32 @@
 from backend.keyboard_input import command_line_input
-from backend.sqliteStuff import SQLite, add_name, delete_name
+from backend.sqliteStuff import SQLite, add_name, delete_name, select_with_glob, select_all
 from backend.table import sql_create_personal_details_table as table
+from backend.serialization import output_to_csv
 
 import click
 
 
 @click.command()
-@click.option('--db', default=False, help='Used to create a database', type=bool)
-@click.option('--add', default=0, help='How many records would you like to add?', type=int)
-@click.option('--remove', default=0, help='Would you like to remove a record? (id)', type=int)
-@click.option('--display', default=False, help='Would you like to display all records?', type=bool)
-def main(db, add, remove, display):
-    if db:
+@click.option('--makedb', default=False, help='Creates an empty database with a table', type=bool)
+@click.option('--add', default=0, help='Adds X number of records', type=int)
+@click.option('--remove', default=0, help='Removing a record with id X (run --display True to see the ids)', type=int)
+@click.option('--display', default=False, help='Displays all records', type=bool)
+@click.option('--filter', default='', help='Filter db with glob, eg. --filter *Joe*', type=str)
+@click.option('--output', default=0, help='Output to: 1-CSV, 2-HTML', type=int)
+def main(makedb, add, remove, display, filter, output):
+    if makedb:
         # Create connection and object
         sql = SQLite()
         sql.create_connection()
         # Create table
         sql.create_table(sql.conn, table)
+        # close the connection
+        sql.conn.close()
+
+    if not add == 0:
+        # Create connection and object
+        sql = SQLite()
+        sql.create_connection()
 
         with sql.conn:
             for i in range(add):
@@ -42,14 +52,23 @@ def main(db, add, remove, display):
         sql = SQLite()
         sql.create_connection()
         with sql.conn:
-            # do stuff
-            cursor = sql.conn.execute("SELECT id, name, address, phone_number from personal_details")
-            for row in cursor:
-                print("id: {}\tname: {}\taddress: {}\tphone_number: {}".format(row[0], row[1], row[2], row[3]))
-
+            select_all(sql.conn)
 
         # close the connection
         sql.conn.close()
+
+    if len(filter) > 0:
+        # Create connection and object
+        sql = SQLite()
+        sql.create_connection()
+        with sql.conn:
+            select_with_glob(sql.conn, 'name', filter)
+
+        # close the connection
+        sql.conn.close()
+
+    if output == 1 or output == 2:
+        output_to_csv('output/output')
 
 
 if __name__ == '__main__':

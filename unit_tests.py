@@ -94,7 +94,6 @@ class SQLiteTests(unittest.TestCase):
         self.assertEqual(result, 2, msg='Glob filter failed')
         sql.conn.close()
         os.remove(sql.db_file)
-        print('done!')
 
 
 def main():

@@ -28,7 +28,11 @@ Once you have some records, you can filter with:
 ~~~~
 py api.py --filter TEXT
 ~~~~
-Where TEXT is a glob pattern (note: does not test vs upper/lower cases)
+Where TEXT is a glob pattern.
+
+###### note: Does not test vs upper/lower cases
+
+###### note: Api filters only 'name'. However the functionality to filter different columns is there
 
 You can display the records with:
 ~~~~

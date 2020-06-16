@@ -18,7 +18,7 @@ Displays help for the api. You should start with:
 ~~~~
 py api.py --makedb True
 ~~~~
-Will create an empty sqlite3 database with a table (go to backend/table.py to add/modify tables)
+Will create an empty sqlite3 database with a single table. Database 'animal.db' is created within root project folder
 ~~~~
 py api.py --add X
 ~~~~
@@ -28,7 +28,7 @@ Once you have some records, you can filter with:
 ~~~~
 py api.py --filter TEXT
 ~~~~
-Where TEXT is a blob pattern (does not test vs upper/lower cases)
+Where TEXT is a glob pattern (note: does not test vs upper/lower cases)
 
 You can display the records with:
 ~~~~
@@ -37,4 +37,17 @@ py api.py --display True
 Records are displayed with primary key (id). So if you like you can remove the ones with ID:
 ~~~~
 py api.py --remove ID
+~~~~
+
+
+#### Additional functionality:
+- Serialization / Output files into project parent directory ./output/
+~~~~
+py api.py --output 1    # csv file
+py api.py --output 2    # txt file
+py api.py --output 3    # html file
+~~~~
+- Outside of the api you can run unit tests with:
+~~~~
+py unit_tests.py
 ~~~~

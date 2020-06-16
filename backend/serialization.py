@@ -38,12 +38,10 @@ def output_to_html(filename):
     sel = tabulate(sel, tablefmt='html')
     with open(file, 'w') as f:
         f.write("{},\t".format(sel))
-        # for row in sel:
-        #     for item in row:
-        #         f.write("{},\t".format(item))
-        #     f.write(";\n")
     sql.conn.close()
 
 
 if __name__ == '__main__':
     output_to_csv('../output')
+    output_to_txt('../output')
+    output_to_html('../output')

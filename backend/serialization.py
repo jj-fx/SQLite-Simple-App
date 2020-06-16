@@ -1,6 +1,6 @@
-import sqlite3
 import csv
 from backend.sqliteStuff import SQLite, select_all
+from tabulate import tabulate
 
 
 def output_to_csv(filename):
@@ -16,11 +16,34 @@ def output_to_csv(filename):
             csv_out.writerow(result)
     sql.conn.close()
 
+
+def output_to_txt(filename):
+    file = filename + '.txt'
+    sql = SQLite()
+    sql.create_connection()
+    sel = select_all(sql.conn)
+    with open(file, 'w') as f:
+        for row in sel:
+            for item in row:
+                f.write("{},\t".format(item))
+            f.write(";\n")
+    sql.conn.close()
+
+
 def output_to_html(filename):
     file = filename + '.html'
     sql = SQLite()
-    conn = sqlite3.connect(sql.db_file)
+    sql.create_connection()
     sel = select_all(sql.conn)
+    sel = tabulate(sel, tablefmt='html')
+    with open(file, 'w') as f:
+        f.write("{},\t".format(sel))
+        # for row in sel:
+        #     for item in row:
+        #         f.write("{},\t".format(item))
+        #     f.write(";\n")
+    sql.conn.close()
+
 
 if __name__ == '__main__':
     output_to_csv('../output')

@@ -43,14 +43,15 @@ def select_with_glob(conn, column, glob):
     return data
 
 
-def select_all(conn):
+def select_all(conn, display=False):
     cur = conn.cursor()
     cur.execute("SELECT * FROM personal_details;")
     rows = cur.fetchall()
     data = list()
     for row in rows:
         data.append(row)
-    print(tabulate(data, '', tablefmt="psql"))
+    if display:
+        print(tabulate(data, '', tablefmt="psql"))
     return data
 
 # Class for creating db, establishing the connection
